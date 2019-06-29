@@ -7,3 +7,7 @@ soup = BeautifulSoup(res.content, 'html.parser')
 table = soup.find_all('table')[0]
 df = pd.read_html(str(table))
 print(df)
+
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///Users/alexren/projects/projectX/db')
+df[0].to_sql('US_Rankings', con=engine)
