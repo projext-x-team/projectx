@@ -9,5 +9,7 @@ df = pd.read_html(str(table))
 print(df)
 
 from sqlalchemy import create_engine
-engine = create_engine('sqlite:///Users/alexren/projects/projectX/db')
-df[0].to_sql('US_Rankings', con=engine)
+import sqlite3
+engine = create_engine('sqlite:////Users/alexren/projects/projectX/db')
+df[0].to_sql('US_Rankings', con=engine, if_exists='append')
+conn.execute('SELECT * FROM US_Rankings').fetchall()
