@@ -1,10 +1,13 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from config import *
 
 app = Flask(__name__)
-database_file = "sqlite:////Users/alexren/projects/projectX/db"
-app.config["SQLALCHEMY_DATABASE_URI"] = database_file
+if Config.ENV == "prod":
+    app.config["SQLALCHEMY_DATABASE_URI"] = ProdConfig.DB_URI
+else:
+    app.config["SQLALCHEMY_DATABASE_URI"] = DevConfig.DB_URI
+
 db = SQLAlchemy(app)
 
 class US_Rankings(db.Model):
@@ -18,12 +21,16 @@ class US_Rankings(db.Model):
     date = db.Column(db.Text)
     swim_meet = db.Column(db.Text)
 
+    @staticmethod
+    def topSwimmers(num):
+        return US_Rankings.query.order_by(US_Rankings.time.asc()).limit(num)
+
     def __repr__(self):
         return "<US_Rankings: {}>".format(self.swimmer)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", topSwimmers=US_Rankings.topSwimmers(100))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

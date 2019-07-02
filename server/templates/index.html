@@ -5,5 +5,24 @@
     </head>
     <body>
         <p>My flask app from template</p>
+        <article>
+            <section>
+                <h2>Top Swimmers</h2>
+                    <table border = 1>
+                        <tr>
+                            <th>Name</th>
+                            <th>Time</th>
+                            <th>Age</th>
+                        </tr>
+                        {% for ts in topSwimmers %}
+                        <tr>
+                            <td>{{ ts.swimmer }}</td>
+                            <td>{{ ts.time }}</td>
+                            <td>{{ ts.age }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </section>
+        </article>
     </body>
 </html>
