@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
 from config import *
 
@@ -30,7 +30,15 @@ class US_Rankings(db.Model):
 
 @app.route("/")
 def home():
-    return render_template("index.html", topSwimmers=US_Rankings.topSwimmers(100))
+    return render_template("index.html", title = Config.AppName, topSwimmers=US_Rankings.topSwimmers(100))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
