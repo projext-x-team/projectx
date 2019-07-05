@@ -1,2 +1,2 @@
 # projectx
-Swimmer Information
+pip install -r requirements.txt

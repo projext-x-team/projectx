@@ -1,0 +1,5 @@
+flask
+wtforms
+flask_sqlalchemy
+pandas
+bs4
