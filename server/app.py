@@ -4,8 +4,24 @@ import json, jwt, datetime
 
 from config import *
 from SwimmerModel import *
+from SearchSwimmerForm import SearchSwimmerForm
 
 db = SQLAlchemy(app)
+swimmers = Swimmer.get_all_swimmers()
+swimmers_added = []
+
+def add_swimmers(_swimmer, swimmername):
+    if _swimmer == {}:
+        flash(swimmername + " can't be found")
+        app.logger.debug(swimmername + " can't be found")
+        return
+    for swimmer in swimmers_added:
+        if swimmer['name'] == _swimmer['name']:
+            flash(swimmername + " is already added")
+            app.logger.debug(swimmername + "is already added")
+            return
+    flash(swimmername + " is added")
+    swimmers_added.append(dict(_swimmer))
 
 class US_Rankings(db.Model):
     __tablename__ = 'US_Rankings'
@@ -30,9 +46,15 @@ class US_Rankings(db.Model):
 def home():
     return render_template("index.html", title = Config.AppName, topSwimmers=US_Rankings.topSwimmers(100))
 
-@app.route("/compare")
-def swimmer_search():
-    return render_template("compare.html", title = Config.AppName)
+@app.route("/compare", methods=["GET","POST"])
+def search_swimmers_by_name():
+    form = SearchSwimmerForm()
+    if form.validate_on_submit():
+        swimmername=form.swimmername.data
+        add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
+        app.logger.debug(str(swimmers_added))
+        return redirect(url_for('search_swimmers_by_name'))
+    return render_template("swimmers.html", form=form, swimmers_added=swimmers_added)
 
 @app.errorhandler(404)
 def page_not_found(e):

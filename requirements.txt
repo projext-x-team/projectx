@@ -3,3 +3,9 @@ wtforms
 flask_sqlalchemy
 pandas
 bs4
+requests
+lxml
+jwt
+datetime
+pyjwt
+flask_wtf
