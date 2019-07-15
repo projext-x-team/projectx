@@ -1,12 +1,9 @@
-from flask import Flask, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
-from config import *
+from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, flash
+from functools import wraps
+import json, jwt, datetime
 
-app = Flask(__name__)
-if Config.ENV == "prod":
-    app.config["SQLALCHEMY_DATABASE_URI"] = ProdConfig.DB_URI
-else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = DevConfig.DB_URI
+from config import *
+from SwimmerModel import *
 
 db = SQLAlchemy(app)
 
@@ -29,8 +26,13 @@ class US_Rankings(db.Model):
         return "<US_Rankings: {}>".format(self.swimmer)
 
 @app.route("/")
+@app.route("/index")
 def home():
     return render_template("index.html", title = Config.AppName, topSwimmers=US_Rankings.topSwimmers(100))
+
+@app.route("/compare")
+def swimmer_search():
+    return render_template("compare.html", title = Config.AppName)
 
 @app.errorhandler(404)
 def page_not_found(e):

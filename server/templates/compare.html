@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="swimmer_comparison">
+    <h1>Swimmer Comparison</h1>
+    <form class="swimmer1">
+        <h2>Step 1: Search Swimmer 1</h2>
+        <div>
+            <div>
+                <label for="Name">Name</label><br>
+                <input type = "text" data-val = "true" data-val-required = "Name is required" id = "TimesSearch_FirstName" name = "FirstName">
+            </div>
+        </div>
+        <input type="submit" value="Search Swimmers">
+    </form>
+    <form class="swimmer2">
+        <h2>Step 2: Search Swimmer 2</h2>
+        <div>
+            <div>
+                <label for="Name2">Name</label><br>
+                <input type = "text" data-val = "true" data-val-required = "Name is required" id = "TimesSearch_FirstName" name = "FirstName">
+            </div>
+        </div>
+        <input type="submit" value="Search Swimmers">
+    </form>
+    <form class="event_selection">
+        <h2>Step 3: Select Events to Compare</h2>
+        <div>
+            <table border="true">
+                <tr>
+                    <th>Events</th>
+                </tr>
+                <tbody style="display:block; overflow:auto; height:200px; width:200%;">
+                    <tr>
+                        <td><input type = "checkbox" name="50FR_SCY"></td>
+                        <td>50 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="100FR_SCY"></td>
+                        <td>100 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="200FR_SCY"></td>
+                        <td>200 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="500FR_SCY"></td>
+                        <td>500 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="1000FR_SCY"></td>
+                        <td>1000 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="1650FR_SCY"></td>
+                        <td>1650 FR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="50BK_SCY"></td>
+                        <td>50 BK SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="100BK_SCY"></td>
+                        <td>100 BK SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="200BK_SCY"></td>
+                        <td>200 BK SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="50FL_SCY"></td>
+                        <td>50 FL SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="100FL_SCY"></td>
+                        <td>100 FL SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="200FL_SCY"></td>
+                        <td>200 FL SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="50BR_SCY"></td>
+                        <td>50 BR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="100BR_SCY"></td>
+                        <td>100 BR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="200BR_SCY"></td>
+                        <td>200 BR SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="100IM_SCY"></td>
+                        <td>100 IM SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="200IM_SCY"></td>
+                        <td>200 IM SCY</td>
+                    </tr>
+                    <tr>
+                        <td><input type = "checkbox" name="400IM_SCY"></td>
+                        <td>400 IM SCY</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="submit" value="Compare Times">
+    </form>
+</div>
+{% endblock %}

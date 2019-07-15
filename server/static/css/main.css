@@ -70,18 +70,18 @@ body {
    =================== */
 
 .header-container {
-    border-bottom: 20px solid #e44d26;
+    border-bottom: 20px solid #2926e4;
 }
 
 .footer-container,
 .main aside {
-    border-top: 20px solid #e44d26;
+    border-top: 20px solid #2926e4;
 }
 
 .header-container,
 .footer-container,
 .main aside {
-    background: #f16529;
+    background: #2c29f1;
 }
 
 .title {
@@ -98,25 +98,26 @@ nav ul {
     list-style-type: none;
 }
 
-nav a {
-    display: block;
-    margin-bottom: 10px;
+nav button {
+    display: inline;
+    box-align: left;
     padding: 15px 0;
 
     text-align: center;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: normal;
 
-    color: white;
-    background: #e44d26;
+    color: blue;
+    background: none;
+    border: none;
 }
 
-nav a:hover,
-nav a:visited {
-    color: white;
+nav button:hover,
+nav button:visited {
+    color: blue;
 }
 
-nav a:hover {
+nav button:hover {
     text-decoration: underline;
 }
 
@@ -153,10 +154,35 @@ nav a:hover {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+.header-container a {
+    display: block;
+    text-align: right;
+    background-color: #2c29f1;
+    color: white;
+}
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
 
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
 
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
 
+.dropdown:hover .dropdown-content {display: block;}
 
 
 
@@ -178,9 +204,8 @@ nav a:hover {
     INTERMEDIATE: Menu
    ==================== */
 
-    nav a {
+    nav button {
         float: left;
-        width: 27%;
         margin: 0 1.7%;
         padding: 25px 2%;
         margin-bottom: 0;
@@ -202,7 +227,7 @@ nav a:hover {
         display: inline;
     }
 
-    .oldie nav a {
+    .oldie nav button {
         margin: 0 0.7%;
     }
 }
@@ -229,8 +254,8 @@ nav a:hover {
     }
 
     nav {
-        float: right;
-        width: 38%;
+        float: left;
+        width: 100%;
     }
 
 /* ============
