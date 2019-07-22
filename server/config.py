@@ -12,6 +12,6 @@ app = Flask(__name__)
 app.debug = True
 app.config["SQLALCHEMY_DATABASE_URI"] = Config.DB_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 app.config['SECRET_KEY'] = 'swimcloud'
 app.logger.setLevel(DEBUG)

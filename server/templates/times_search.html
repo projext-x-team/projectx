@@ -25,7 +25,7 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane" id="1">
+            <div class="tab-pane active" id="1">
                 <article class="search" id="swimmer">
                     <h1>Swimmer Comparison</h1>
                     <form action="" method="post" class="swimmer">
@@ -48,14 +48,16 @@
                                     <th>Swimmer</th>
                                     <th>Age</th>
                                     <th>Club</th>
-                                    <th>Select</th>
+                                    <th>Primary Swimmer</th>
+                                    <th>Compare</th>
                                 </tr>
                                 {% for swimmer in swimmers_added %}
                                 <tr>
                                     <td>{{ swimmer.name }}</td> 
                                     <td>{{ swimmer.age }}</td>
                                     <td>{{ swimmer.club }}</td>
-                                    <td><input type="checkbox"><input></td>
+                                    <td><input type="radio" name="primary" value="{{ swimmer.uuid }}" {{ swimmer.primary }}></td>
+                                    <td><input type="checkbox" name="compare" value="{{ swimmer.uuid }}" {{ swimmer.compare }}></td>
                                 </tr>
                                 {% endfor %}
                             </table>
@@ -77,6 +79,17 @@
                 </article>
             </div>
         </div>
+        
+    </article>
+    <article>
+        <h2>Swimmer Comparison</h2>
+        {% if plots %}
+            {% for plot in plots %}
+                {% for part in plot %}
+                    {{ part | safe }}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
     </article>
 </div>
 {% endblock %}

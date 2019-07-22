@@ -9,3 +9,4 @@ jwt
 datetime
 pyjwt
 flask_wtf
+bokeh
