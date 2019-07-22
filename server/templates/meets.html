@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block content %}
+    <article class="subnav">
+        <ul class="nav nav-tabs">
+            <li><a href="/times-search/swimmers.html">Swimmer Search</a></li>
+            <li class="active"><a href="/times-search/meets.html">Meet Search</a></li>
+            <li><a href="/times-search/standards.html">Time Standards Search</a></li>
+        </ul>
+    </article>
+    <article class="search" id="meet">
+        <h1>Meet Comparison</h1>
+    </article>
+{% endblock %}

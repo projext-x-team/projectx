@@ -1,29 +1,63 @@
+from flask import url_for
 {% extends "layout.html" %}
 {% from "form_macros.html" import render_field %}
 
 {% block content %}
-    <article>
+    <article class="subnav">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="/times-search/swimmers.html">Swimmer Search</a></li>
+            <li><a href="/times-search/meets.html">Meet Search</a></li>
+            <li><a href="/times-search/standards.html">Time Standards Search</a></li>
+        </ul>
+    </article>
+    <article class=flashes>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </article>
+    <article class="search" id="swimmer">
         <h1>Swimmer Comparison</h1>
         <form action="" method="post" class="swimmer">
             <article>
                 {{form.hidden_tag()}}
                 <p>
-                    {{ render_field(form.swimmername, size=50)}}
+                    {{ render_field(form.swimmername, size=50) }}
                     <button type="submit">Add</button>
                 </p>
             </article>
         </form>
-    </article>
-    <article>
-        <h2>Swimmers Added</h2>
-        {% if swimmers_added %}
-        <ul>
-            {% for swimmer in swimmers_added %}
-            <li>{{ swimmer.name }} from {{ swimmer.club }} added</li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        No swimmers added yet.
-        {% endif %}
+        <article>
+            <h2>Swimmers Added</h2>
+            <form action="" method="post" class="compare">
+                {% if swimmers_added %}
+                <button type="reset">Clear All</button>
+                <button type="submit">Compare</button>
+                <table border=1>
+                    <tr>
+                        <th>Swimmer</th>
+                        <th>Age</th>
+                        <th>Club</th>
+                        <th>Select</th>
+                    </tr>
+                    {% for swimmer in swimmers_added %}
+                    <tr>
+                        <td>{{ swimmer.name }}</td> 
+                        <td>{{ swimmer.age }}</td>
+                        <td>{{ swimmer.club }}</td>
+                        <td><input type="checkbox"><input></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %}
+                No swimmers added yet.
+                {% endif %}
+            </form>
+        </article>
     </article>
 {% endblock %}

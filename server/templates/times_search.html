@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block content %}
+    <article class="subnav">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#swimmer">Swimmer Search</a></li>
+            <li><a href="#meet">Meet Search</a></li>
+            <li><a href="#standards">Time Standards Search</a></li>
+        </ul>
+    </article>
+    <article class=flashes>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </article>
+    <article class="search" id="swimmer">
+        <h1>Swimmer Comparison</h1>
+        <form action="" method="post" class="swimmer">
+            <article>
+                {{form.hidden_tag()}}
+                <p>
+                    {{ render_field(form.swimmername, size=50) }}
+                    <button type="submit">Add</button>
+                </p>
+            </article>
+        </form>
+        <article>
+            <h2>Swimmers Added</h2>
+            {% if swimmers_added %}
+            <ul>
+                {% for swimmer in swimmers_added %}
+                <li>{{ swimmer.name }} from {{ swimmer.club }} added</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            No swimmers added yet.
+            {% endif %}
+        </article>
+    </article>
+    <article class="search" id="meet">
+        <h1>Meet Comparison</h1>
+    </article>
+    <article class="search" id="standards">
+        <h1>Time Standards Comparison</h1>
+    </article>
+{% endblock %}
+

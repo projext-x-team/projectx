@@ -15,6 +15,14 @@
         <link rel="stylesheet" href="{{url_for('static', filename = 'css/normalize.min.css')}}">
 
         <script src="../static/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -24,8 +32,10 @@
         <div class="header-container">
             <header class="wrapper clearfix">
                 <h1 class="title">Swim Cloud</h1>
-                <a href="#">Log In</a>
-                <a href="#">Sign Up</a>
+                <ul>
+                    <li><a href="#">Log In</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                </ul>
             </header>
         </div>
         <div class="menubar">
@@ -33,34 +43,13 @@
                 <ul>
                     <li><button><a href="/index">Home</a></button></li>
                     <li><button><a href="#">Favorites</a></button></li>
-                    <li>
-                        <div class="dropdown">
-                            <button class="dropbtn">Compare</button>
-                            <div class="dropdown-content">
-                                <a href="/compare">Swimmer Comparison</a>
-                                <a href="#">Compare to Standards</a>
-                                <a href="#">Records Comparison</a>
-                            </div>
-                        </div>
-                    </li>
+                    <li><button><a href="/times-search/swimmers.html">Times Search</a></button></li>
                 </ul>
             </nav>
         </div>
 
         <div class="main-container">
             <div class="main wrapper clearfix">
-
-                <article class=flashes>
-                    {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                    {% endwith %}
-                </article>
                 {% block content %}
                 {% endblock %}
             </div>
