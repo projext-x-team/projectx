@@ -14,11 +14,80 @@
 
   </head>
   <body>
-        <ul class="nav nav-tabs">
-                <li class="active"><a href="times_search.html">Home</a></li>
-                <li><a href="index.html">Menu 1</a></li>
-                <li><a href="#">Menu 2</a></li>
-                <li><a href="#">Menu 3</a></li>
-              </ul>
+    <div>
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#1" aria-controls="1" role="tab" data-toggle="tab">Swimmer Search</a></li>
+        <li role="presentation"><a href="#2" aria-controls="2" role="tab" data-toggle="tab">Meet Search</a></li>
+        <li role="presentation"><a href="#3" aria-controls="3" role="tab" data-toggle="tab">Time Standards Search</a></li>
+      </ul>
+    
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" id="1">
+          <article class=flashes>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+          </article>
+          <article class="search" id="swimmer">
+            <h1>Swimmer Comparison</h1>
+            <form action="" method="post" class="swimmer">
+                <article>
+                    {{form.hidden_tag()}}
+                    <p>
+                        {{ render_field(form.swimmername, size=50) }}
+                        <button type="submit">Add</button>
+                    </p>
+                </article>
+            </form>
+            <article>
+                <h2>Swimmers Added</h2>
+                <form action="" method="post" class="compare">
+                    {% if swimmers_added %}
+                    <button type="reset">Clear All</button>
+                    <button type="submit">Compare</button>
+                    <table border=1>
+                        <tr>
+                            <th>Swimmer</th>
+                            <th>Age</th>
+                            <th>Club</th>
+                            <th>Select</th>
+                        </tr>
+                        {% for swimmer in swimmers_added %}
+                        <tr>
+                            <td>{{ swimmer.name }}</td> 
+                            <td>{{ swimmer.age }}</td>
+                            <td>{{ swimmer.club }}</td>
+                            <td><input type="checkbox"><input></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% else %}
+                    No swimmers added yet.
+                    {% endif %}
+                </form>
+            </article>
+          </article>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="2">
+          <article class="search" id="meet">
+              <h1>Meet Comparison</h1>
+          </article>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="3">
+          <article class="search" id="standards">
+              <h1>Time Standards Comparison</h1>
+          </article>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -2,13 +2,7 @@
 {% from "form_macros.html" import render_field %}
 
 {% block content %}
-    <article class="subnav">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#swimmer">Swimmer Search</a></li>
-            <li><a href="#meet">Meet Search</a></li>
-            <li><a href="#standards">Time Standards Search</a></li>
-        </ul>
-    </article>
+<div>
     <article class=flashes>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -20,35 +14,70 @@
         {% endif %}
         {% endwith %}
     </article>
-    <article class="search" id="swimmer">
-        <h1>Swimmer Comparison</h1>
-        <form action="" method="post" class="swimmer">
-            <article>
-                {{form.hidden_tag()}}
-                <p>
-                    {{ render_field(form.swimmername, size=50) }}
-                    <button type="submit">Add</button>
-                </p>
-            </article>
-        </form>
-        <article>
-            <h2>Swimmers Added</h2>
-            {% if swimmers_added %}
-            <ul>
-                {% for swimmer in swimmers_added %}
-                <li>{{ swimmer.name }} from {{ swimmer.club }} added</li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            No swimmers added yet.
-            {% endif %}
-        </article>
+
+    <!-- Nav tabs -->
+    <article>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#1" data-toggle="tab">Swimmer Search</a></li>
+            <li><a href="#2" data-toggle="tab">Meet Search</a></li>
+            <li><a href="#3" data-toggle="tab">Time Standards Search</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane" id="1">
+                <article class="search" id="swimmer">
+                    <h1>Swimmer Comparison</h1>
+                    <form action="" method="post" class="swimmer">
+                        <article>
+                            {{form.hidden_tag()}}
+                            <p>
+                                {{ render_field(form.swimmername, size=50) }}
+                                <button type="submit">Add</button>
+                            </p>
+                        </article>
+                    </form>
+                    <article>
+                        <h2>Swimmers Added</h2>
+                        <form action="" method="post" class="compare">
+                            {% if swimmers_added %}
+                            <button type="reset">Clear All</button>
+                            <button type="submit">Compare</button>
+                            <table border=1>
+                                <tr>
+                                    <th>Swimmer</th>
+                                    <th>Age</th>
+                                    <th>Club</th>
+                                    <th>Select</th>
+                                </tr>
+                                {% for swimmer in swimmers_added %}
+                                <tr>
+                                    <td>{{ swimmer.name }}</td> 
+                                    <td>{{ swimmer.age }}</td>
+                                    <td>{{ swimmer.club }}</td>
+                                    <td><input type="checkbox"><input></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            {% else %}
+                            No swimmers added yet.
+                            {% endif %}
+                        </form>
+                    </article>
+                </article>
+            </div>
+            <div class="tab-pane" id="2">
+                <article class="search" id="meet">
+                    <h1>Meet Comparison</h1>
+                </article>
+            </div>
+            <div class="tab-pane" id="3">
+                <article class="search" id="standards">
+                    <h1>Time Standards Comparison</h1>
+                </article>
+            </div>
+        </div>
     </article>
-    <article class="search" id="meet">
-        <h1>Meet Comparison</h1>
-    </article>
-    <article class="search" id="standards">
-        <h1>Time Standards Comparison</h1>
-    </article>
+</div>
 {% endblock %}
 

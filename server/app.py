@@ -30,7 +30,7 @@ def add_swimmers(_swimmer, swimmername):
 def home():
     return render_template("index.html", title = Config.AppName, topSwimmers=US_Rankings.topSwimmers(100))
 
-@app.route("/times-search/swimmers.html", methods=["GET","POST"])
+@app.route("/times-search", methods=["GET","POST"])
 def search_swimmers_by_name():
     form = SearchSwimmerForm()
     if form.validate_on_submit():
@@ -38,27 +38,7 @@ def search_swimmers_by_name():
         add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
         app.logger.debug(str(swimmers_added))
         return redirect(url_for('search_swimmers_by_name'))
-    return render_template("swimmers.html", form=form, swimmers_added=swimmers_added)
-
-@app.route("/times-search/meets.html", methods=["GET","POST"])
-def search_meets_by_name():
-    form = SearchSwimmerForm()
-    if form.validate_on_submit():
-        swimmername=form.swimmername.data
-        add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
-        app.logger.debug(str(swimmers_added))
-        return redirect(url_for('search_swimmers_by_name'))
-    return render_template("meets.html", form=form, swimmers_added=swimmers_added)
-
-@app.route("/times-search/standards.html", methods=["GET","POST"])
-def search_standards_by_name():
-    form = SearchSwimmerForm()
-    if form.validate_on_submit():
-        swimmername=form.swimmername.data
-        add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
-        app.logger.debug(str(swimmers_added))
-        return redirect(url_for('search_swimmers_by_name'))
-    return render_template("standards.html", form=form, swimmers_added=swimmers_added)
+    return render_template("times_search.html", form=form, swimmers_added=swimmers_added)
 
 
 @app.errorhandler(404)
