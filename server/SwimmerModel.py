@@ -23,6 +23,7 @@ class Swimmer(db.Model):
     time_h=db.Column(db.Integer) 
     time_m=db.Column(db.Integer) 
     time_s=db.Column(db.Integer) 
+    time_ms=db.Column(db.Integer)
 
     def add_swimmer(_id, _swimmer_uuid, _name, _club, _age):
         new_swimmer = Swimmer(swimmer_uuid=_swimmer_uuid, name=_name, club=_club, age=_age)
@@ -73,10 +74,11 @@ class Swimmer(db.Model):
                 'meet_date': self.meet_date,
                 'meet_age': self.meet_age,
                 'event': self.event,
-                'time': self.time.strftime("%M:%S"),
+                'time': self.time.strftime("%M:%S.%f") [:-4],
                 'time_h': self.time_h,
                 'time_m': self.time_m,
-                'time_s': self.time_s
+                'time_s': self.time_s,
+                'time_ms': self.time_ms
             }
 
     def __repr__(self):
@@ -98,6 +100,7 @@ class Swimmer(db.Model):
                 'time': self.time,
                 'time_h': self.time_h,
                 'time_m': self.time_m,
-                'time_s': self.time_s
+                'time_s': self.time_s,
+                'time_ms': self.time_ms
             }
         return json.dumps(ret_obj)

@@ -120,6 +120,7 @@ with urllib.request.urlopen(req,data=data) as f:
                             swimmer.time_h=tempTime.hour
                             swimmer.time_m=tempTime.minute
                             swimmer.time_s=tempTime.second
+                            swimmer.time_ms=tempTime.microsecond
                             swimmer_record=Swimmer()
                             swimmer_record=copy.deepcopy(swimmer)
                             #app.logger.debug(swimmer_record)

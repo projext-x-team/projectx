@@ -94,7 +94,7 @@ def make_plot():
         data = primary_swimmer_data[primary_swimmer_data.event==e]
         data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
         x = pd.to_datetime(data['meet_date'])
-        y = (data['time_h']*60 + data['time_m'] + data['time_s']/60).tolist()
+        y = (data['time_h']*60*60 + data['time_m']*60 + data['time_s'] + data['time_ms']/1000000).tolist()
 
         source = ColumnDataSource(data=dict(
             x=x,
