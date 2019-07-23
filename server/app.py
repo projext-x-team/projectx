@@ -28,8 +28,6 @@ def set_primary_swimmer():
         return "Checked"
 
 def add_swimmers(_swimmers, swimmername):
-    app.logger.debug("++++++++++++++++++++++++++++++++++++")
-    app.logger.debug("add_swimmers")
     if len(_swimmers) == 0:
         flash(swimmername + " can't be found")
         app.logger.debug(swimmername + " can't be found")
@@ -43,8 +41,6 @@ def add_swimmers(_swimmers, swimmername):
     swimmers_added_alldata.extend(_swimmers)
     for _swimmer in _swimmers:
         bExisting=False
-        app.logger.debug("===============================================")
-        app.logger.debug(_swimmer)
         for swimmer_added in swimmers_added:
             if swimmer_added['name'] == _swimmer['name'] and swimmer_added['age'] == _swimmer['age'] and swimmer_added['club'] == _swimmer['club']:
                 bExisting = True
@@ -60,8 +56,6 @@ def add_swimmers(_swimmers, swimmername):
                 'compare': "Checked"
             }
             swimmers_added.append(s)
-    app.logger.debug("**********************************")
-    app.logger.debug(swimmers_added)
 
 
 
@@ -93,17 +87,14 @@ def make_plot():
     primary_swimmer_data=df_swimmers_data[df_swimmers_data.swimmer_uuid==primary_swimmer.swimmer_uuid[0]]
     primary_swimmer_data['meet_date'] = primary_swimmer_data['meet_date'].astype('datetime64[ns]')
     primary_swimmer_data=primary_swimmer_data.sort_values(by=['event', 'meet_date'])
-    app.logger.debug(primary_swimmer_data)
-    app.logger.debug("-------------------------------------")
 
     events=list(set(primary_swimmer_data.event))
     plots=[]
-    app.logger.debug(events)
     for e in events:
-        data=primary_swimmer_data[primary_swimmer_data.event==e]
-        data['swim_meet_date'] = data['swim_meet']+" " + data['meet_date'].astype(str)
+        data = primary_swimmer_data[primary_swimmer_data.event==e]
+        data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
         x = pd.to_datetime(data['meet_date'])
-        y = (data['time_h']*60+data['time_m']+data['time_s']/60).tolist()
+        y = (data['time_h']*60 + data['time_m'] + data['time_s']/60).tolist()
 
         source = ColumnDataSource(data=dict(
             x=x,
@@ -125,9 +116,7 @@ def make_plot():
         p.xaxis.major_label_orientation= "vertical"
         p.line('x', 'y', line_width=2, source=source)
         plots.append(p)
-        app.logger.debug(len(plots))
-        app.logger.debug("+++++")
-
+    
     script, div = components(column(plots))
     return script, div
 
