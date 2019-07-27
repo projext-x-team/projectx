@@ -3,6 +3,7 @@ from functools import wraps
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.layouts import column, gridplot
 from bokeh.embed import components
+from bokeh.palettes import Viridis3 
 import pandas as pd
 import json, jwt, datetime
 from math import pi
@@ -91,6 +92,9 @@ def make_plot():
     primary_swimmer_data=primary_swimmer_data.sort_values(by=['event', 'meet_date'])
 
     events=list(set(primary_swimmer_data.event))
+    app.logger.debug("----------------------------------------------")
+    app.logger.debug(events)
+    events.sort()
     plots=[]
     for e in events:
         data = primary_swimmer_data[primary_swimmer_data.event==e]
@@ -117,7 +121,9 @@ def make_plot():
         p = figure( x_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
         p.xaxis.major_label_orientation= "vertical"
         p.line('x', 'y', line_width=2, source=source)
+        p.circle('x','y', size=5, color=Viridis3[0], source=source)
         plots.append(p)
+
 
     # plots is a simple list [p1, p2, p3, p4 ....]
     # convert plots to [[p1, p2], [p3, p4], ...]
