@@ -1,1 +1,7 @@
 *.pyc
+.DS_Store
+.vscode
+.vscode/*
+db
+__pycache__
+__pycache__/*

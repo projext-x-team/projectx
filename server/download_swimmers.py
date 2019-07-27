@@ -41,13 +41,21 @@ trans.commit()
 
 base_url = "https://swimmingrank.com/cgi-bin/ca_search.cgi"
 
-class Result:
+class SwimmerResult:
     # store downloaded web page
     res=""
     soup=""
     div=""
     table=""
+    eventmenu=""
+    urls=""
 
+class SwimmerEventResult:
+    res=""
+    soup=""
+    div=""
+    table=""
+    h3=""
 
 # main program starts here
 
@@ -59,7 +67,7 @@ for i in ascii_lowercase:
             }
 '''
 post_params = { 
-    'searchstring'  : "alex ren"   # search name like "aa", "ab", till "zz"
+    'searchstring'  : "ethan wang"   
     }
 data = urllib.parse.urlencode(post_params).encode("utf-8")
 req = urllib.request.Request(base_url)
@@ -69,65 +77,74 @@ with urllib.request.urlopen(req,data=data) as f:
     soup=BeautifulSoup(resp, 'html.parser')
     table=soup.find_all('table')[0]
     buttons=table.find_all('button')
-    #print(buttons)
+    
+    # each button has one swimmer name
     for button in buttons:
         swimmer.name = button.get_text()
         swimmer.swimmer_uuid = uuid.uuid4().hex
         url=button.get('onclick').split("=")[1]
-        #print(swimmer.name + " ->" +url)
-        result=Result()
-        result.res = requests.get(url[1:-1])
-        result.soup = BeautifulSoup(result.res.content, 'html.parser')
-        #print(result.soup)
-        result.div = result.soup.find(id="content")
-        #print(result.div)
-        result.tables = result.div.find_all('table')
-        #print(result.tables)
-        #for table in result.tables:
-        for i in range(len(result.tables)):
-            df = pd.read_html(str(result.tables[i]), header=0, index_col=0)[0]
-            app.logger.debug("======= Table #"+str(i))
-            # one swimmer
-            if i==0:
-                # the first table shows the swimmer information
-                r=df.to_dict('records')[0] # the first row: {'Pleasanton Seahawks': 'Zone 2', 'Latest Meets': 'Zone 2'}
-                app.logger.debug("xxxxxx")
-                app.logger.debug(df)
-                app.logger.debug("xxxxxx")
-                swimmer.club=list(r.keys())[0] 
-                swimmer.age=df.loc['Age','Latest Meets']
-                swimmer.gender=df.loc['Sex','Latest Meets']
-                swimmer.lsc=df.loc['LSC','Latest Meets']
-            else:
-                # the second and later tables show the swimmer meet results
+        
+        # read data from swimmer's page like https://www.swimmingrank.com/cal/strokes/strokes_pc/AILOEARCE_meets.html
+        swimmerResult=SwimmerResult()
+        swimmerResult.res = requests.get(url[1:-1])
+        swimmerResult.soup = BeautifulSoup(swimmerResult.res.content, 'html.parser')
+        #print(swimmerResult.soup)
+        swimmerResult.div = swimmerResult.soup.find(id="content")
+        swimmerResult.tables = swimmerResult.div.find_all('table')
+        #tables[0] has the swimmer information
+        df = pd.read_html(str(swimmerResult.tables[0]), header=0, index_col=0)[0]
+        r=df.to_dict('records')[0] # the first row: {'Pleasanton Seahawks': 'Zone 2', 'Latest Meets': 'Zone 2'}
+        swimmer.club=list(r.keys())[0] 
+        swimmer.age=df.loc['Age','Latest Meets']
+        swimmer.gender=df.loc['Sex','Latest Meets']
+        swimmer.lsc=df.loc['LSC','Latest Meets']
+
+        swimmerResult.eventmenu = swimmerResult.soup.find(id="event_menu")
+        swimmerResult.urls = swimmerResult.eventmenu.find_all('a', href=True)
+        for i in range(1, len(swimmerResult.urls)):
+            # from the Nav bar, get all of the events URLs
+            url=swimmerResult.urls[i]['href'] # sample: https://www.swimmingrank.com/cal/strokes/strokes_pc/AILOEARCE_50FR.html
+            app.logger.debug(url)
+            swimmerEventResult=SwimmerEventResult()
+            swimmerEventResult.res = requests.get(url)
+            swimmerEventResult.soup=BeautifulSoup(swimmerEventResult.res.content, 'html.parser')
+            selector = 'h3'
+            h3s=swimmerEventResult.soup.select(selector)
+            selector = 'h3 ~ table'
+            tables=swimmerEventResult.soup.select(selector)
+            for i in range(len(tables)-1):  # the last table is "About Us", which we don't need
+                df = pd.read_html(str(tables[i]))[0]
                 if len(df.to_dict())>0:
                     r=df.to_dict()
-                    k1=list(r.keys())[0]
-                    swimmer.swim_meet=k1.split(".")[0]
-                    if len(r[k1].keys()) > 0 :
-                        print(r[k1].keys())
-                        k11=list(r[k1].keys())[0]
-                        swimmer.meet_date=k11.split("Age")[0]
-                        swimmer.meet_age=k11.split("Age")[1]
-                        for j in range(2, len(r[k1].keys())):
-                            swimmer.event=list(r[k1].keys())[j]
-                            swimmer.time=r[k1][swimmer.event]
-                            if (str(swimmer.time)).find(":") > 0:
-                                tempTime=datetime.datetime.strptime(str(swimmer.time),"%M:%S.%f")
-                            else:
-                                tempTime=datetime.datetime.strptime(str(swimmer.time),"%S.%f")
-                            swimmer.time=tempTime
-                            swimmer.time_h=tempTime.hour
-                            swimmer.time_m=tempTime.minute
-                            swimmer.time_s=tempTime.second
-                            swimmer.time_ms=tempTime.microsecond
-                            swimmer_record=Swimmer()
-                            swimmer_record=copy.deepcopy(swimmer)
-                            #app.logger.debug(swimmer_record)
-                            db.session.add(swimmer_record)
-                            db.session.commit()
+                    app.logger.debug("-------------------------------")
+                    app.logger.debug(h3s[i].text)
+                    app.logger.debug(len(df.columns))
+                    app.logger.debug(df.keys)
+                    app.logger.debug(df.items)
+                    app.logger.debug(df.index)
+                    # iterate through the table to get swim data
+                    for j in df.index:
+                        app.logger.debug(df.loc[j, "Swim Meet"])
+                        swimmer.swim_meet=df.loc[j, "Swim Meet"]
+                        swimmer.meet_date=df.loc[j, "Date"]
+                        swimmer.meet_age=int(df.loc[j, "Age"])
+                        swimmer.event=h3s[i].text
+                        swimmer.time=df.loc[j, "Time"]
+                        swimmer.standard=df.loc[j,"Standard"]
+                        swimmer.swim_team=df.loc[j,"Swim Team"]
+                        if (str(swimmer.time)).find(":") > 0:
+                            tempTime=datetime.datetime.strptime(str(swimmer.time),"%M:%S.%f")
+                        else:
+                            tempTime=datetime.datetime.strptime(str(swimmer.time),"%S.%f")
+                        swimmer.time=tempTime
+                        swimmer.time_h=tempTime.hour
+                        swimmer.time_m=tempTime.minute
+                        swimmer.time_s=tempTime.second
+                        swimmer.time_ms=tempTime.microsecond
+                        swimmer_record=Swimmer()
+                        swimmer_record=copy.deepcopy(swimmer)
+                        #app.logger.debug(swimmer_record)
+                        db.session.add(swimmer_record)
+                        db.session.commit()
 
-
-
-
-
+                

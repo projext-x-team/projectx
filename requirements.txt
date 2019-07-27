@@ -10,3 +10,4 @@ datetime
 pyjwt
 flask_wtf
 bokeh
+html5lib

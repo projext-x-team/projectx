@@ -19,6 +19,8 @@ class Swimmer(db.Model):
     meet_date = db.Column(db.String)
     meet_age = db.Column(db.Integer)
     event = db.Column(db.String)
+    standard = db.Column(db.String)
+    swim_team = db.Column(db.String)
     time=db.Column(db.DateTime) 
     time_h=db.Column(db.Integer) 
     time_m=db.Column(db.Integer) 
@@ -74,6 +76,8 @@ class Swimmer(db.Model):
                 'meet_date': self.meet_date,
                 'meet_age': self.meet_age,
                 'event': self.event,
+                'standard': self.standard,
+                'swim_team': self.swim_team,
                 'time': self.time.strftime("%M:%S.%f") [:-4],
                 'time_h': self.time_h,
                 'time_m': self.time_m,
@@ -97,6 +101,8 @@ class Swimmer(db.Model):
                 'meet_date': self.meet_date,
                 'meet_age': self.meet_age,
                 'event': self.event,
+                'standard': self.standard,
+                'swim_team': self.swim_team,
                 'time': self.time,
                 'time_h': self.time_h,
                 'time_m': self.time_m,
