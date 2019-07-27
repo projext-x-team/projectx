@@ -59,11 +59,13 @@ def add_swimmers(_swimmers, swimmername):
 
 
 
-@app.route("/")
-@app.route("/index")
+#@app.route("/")
+#@app.route("/index")
 def home():
     return render_template("index.html", title = Config.AppName, topSwimmers=US_Rankings.topSwimmers(100))
 
+@app.route("/", methods=["GET","POST"])
+@app.route("/index", methods=["GET","POST"])
 @app.route("/times-search", methods=["GET","POST"])
 def search_swimmers_by_name():
     form = SearchSwimmerForm()
