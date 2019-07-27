@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, jsonify, request, Response, redirect, flash
 from functools import wraps
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
-from bokeh.layouts import column
+from bokeh.layouts import column, gridplot
 from bokeh.embed import components
 import pandas as pd
 import json, jwt, datetime
@@ -118,8 +118,18 @@ def make_plot():
         p.xaxis.major_label_orientation= "vertical"
         p.line('x', 'y', line_width=2, source=source)
         plots.append(p)
+
+    # plots is a simple list [p1, p2, p3, p4 ....]
+    # convert plots to [[p1, p2], [p3, p4], ...]
+    ps=[]
+    for i in range(int(len(plots)/2)):
+        ps.append([plots[i*2],plots[i*2+1]])
+    if len(plots) % 2 ==1:  # if plots has odd number
+        ps=ps.append([plots[len(plots)-1],None])
     
-    script, div = components(column(plots))
+    #script, div = components(column(plots))
+    grid = gridplot(ps)
+    script, div = components(grid)
     return script, div
 
 

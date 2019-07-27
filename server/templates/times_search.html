@@ -37,33 +37,33 @@
                             </p>
                         </article>
                     </form>
-                    <article>
-                        <h2>Swimmers Added</h2>
-                        <form action="" method="post" class="compare">
-                            {% if swimmers_added %}
-                            <table class="table table-hover table-striped table-responsive">
-                                <tr>
-                                    <th>Swimmer</th>
-                                    <th>Age</th>
-                                    <th>Club</th>
-                                    <th>Primary Swimmer</th>
-                                    <th>Compare</th>
-                                </tr>
-                                {% for swimmer in swimmers_added %}
-                                <tr>
-                                    <td>{{ swimmer.name }}</td> 
-                                    <td>{{ swimmer.age }}</td>
-                                    <td>{{ swimmer.club }}</td>
-                                    <td><input type="radio" name="primary" value="{{ swimmer.uuid }}" {{ swimmer.primary }}></td>
-                                    <td><input type="checkbox" name="compare" value="{{ swimmer.uuid }}" {{ swimmer.compare }}></td>
-                                </tr>
-                                {% endfor %}
-                            </table>
-                            {% else %}
-                            No swimmers added yet.
-                            {% endif %}
-                        </form>
-                    </article>
+                </article>
+                <article>
+                    <h2>Swimmers Added</h2>
+                    <form action="" method="post" class="compare">
+                        {% if swimmers_added %}
+                        <table class="table table-hover table-striped table-responsive">
+                            <tr>
+                                <th>Swimmer</th>
+                                <th>Age</th>
+                                <th>Club</th>
+                                <th>Primary Swimmer</th>
+                                <th>Compare</th>
+                            </tr>
+                            {% for swimmer in swimmers_added %}
+                            <tr>
+                                <td>{{ swimmer.name }}</td> 
+                                <td>{{ swimmer.age }}</td>
+                                <td>{{ swimmer.club }}</td>
+                                <td><input type="radio" name="primary" value="{{ swimmer.uuid }}" {{ swimmer.primary }}></td>
+                                <td><input type="checkbox" name="compare" value="{{ swimmer.uuid }}" {{ swimmer.compare }}></td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% else %}
+                        No swimmers added yet.
+                        {% endif %}
+                    </form>
                 </article>
             </div>
             <div class="tab-pane" id="2">
@@ -77,17 +77,20 @@
                 </article>
             </div>
         </div>
+        <div class="tab-content">
+            <article>
+                {% if plots %}
+                <h2>Swimmer Comparison</h2>
+                    {% for plot in plots %}
+                        {% for part in plot %}
+                            {{ part | safe}}
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </article>
+        </div>
     </article>
-    <article>
-        {% if plots %}
-        <h2>Swimmer Comparison</h2>
-            {% for plot in plots %}
-                {% for part in plot %}
-                    {{ part | safe}}
-                {% endfor %}
-            {% endfor %}
-        {% endif %}
-    </article>
+
 </div>
 {% endblock %}
 
