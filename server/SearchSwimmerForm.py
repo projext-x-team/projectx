@@ -1,8 +1,8 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms.fields import StringField
 from wtforms.validators import DataRequired, url
 
-class SearchSwimmerForm(Form):
+class SearchSwimmerForm(FlaskForm):
     swimmername = StringField('Swimmer Name:', validators=[DataRequired()])
 
     def validate(self):

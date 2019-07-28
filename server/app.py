@@ -34,12 +34,10 @@ def set_primary_swimmer():
 def add_swimmers(_swimmers, swimmername):
     if len(_swimmers) == 0:
         flash(swimmername + " can't be found")
-        app.logger.debug(swimmername + " can't be found")
         return
     for swimmer in swimmers_added:
         if swimmer['name'].lower() == swimmername.lower():
             flash(swimmername + " is already added")
-            app.logger.debug(swimmername + "is already added")
             return
     flash(swimmername + " is added")
     swimmers_added_alldata.extend(_swimmers)
@@ -96,15 +94,10 @@ def make_plot():
     plots=[]
     for e in events:
         data = primary_swimmer_data[primary_swimmer_data.event==e]
-        data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
+        # data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
         #x = pd.to_datetime(data['meet_date'], format="%y/%m/%d")
         x = data['meet_age']
         y = pd.to_datetime(data['time'], format="%M:%S.%f")
-        app.logger.debug("=====================================================")
-        app.logger.debug(e)
-        app.logger.debug(x)
-        app.logger.debug(y)
-        app.logger.debug(type(y))
         
         source = ColumnDataSource(data=dict(
             x=x,
