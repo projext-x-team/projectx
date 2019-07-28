@@ -67,7 +67,7 @@ for i in ascii_lowercase:
             }
 '''
 post_params = { 
-    'searchstring'  : "ethan wang"   
+    'searchstring'  : "alex ren"   
     }
 data = urllib.parse.urlencode(post_params).encode("utf-8")
 req = urllib.request.Request(base_url)
