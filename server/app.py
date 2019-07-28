@@ -20,6 +20,7 @@ swimmers_added = []
 swimmers_added_alldata = []
 plots = []
 
+# define the primary swimmer based on user selection
 def set_primary_swimmer():
     if len(swimmers_added) == 0:
         return "Checked"
@@ -29,6 +30,7 @@ def set_primary_swimmer():
                 return ""
         return "Checked"
 
+# add new swimmers to compare
 def add_swimmers(_swimmers, swimmername):
     if len(_swimmers) == 0:
         flash(swimmername + " can't be found")
@@ -82,7 +84,6 @@ def make_plot():
     df_swimmers=pd.DataFrame(swimmers_added)
     df_swimmers_data=pd.DataFrame(swimmers_added_alldata)
 
-
     primary_swimmer=df_swimmers[df_swimmers.primary=="Checked"]
     compared_swimmers=df_swimmers[df_swimmers.compare=="Checked"]
 
@@ -105,7 +106,6 @@ def make_plot():
         app.logger.debug(y)
         app.logger.debug(type(y))
         
-
         source = ColumnDataSource(data=dict(
             x=x,
             y=y,
@@ -138,11 +138,13 @@ def make_plot():
                 seconds = ['%M:%S.%3N'],
                 milliseconds = ['%M:%S.%3N'],
             )
-        p.line('x', 'y', line_width=2, source=source)
+        p.line('x', 'y', line_width=2, source=source, legend=data['name'].iloc[0], line_color=Viridis3[0])
         p.circle('x','y', size=5, color=Viridis3[0], source=source)
+        p.legend.location = "top_right"
+        p.xaxis.axis_label = "Age"
+        p.yaxis.axis_label = "Time"
         plots.append(p)
     
-
 
     # plots is a simple list [p1, p2, p3, p4 ....]
     # convert plots to [[p1, p2], [p3, p4], ...]
