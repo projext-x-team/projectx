@@ -4,6 +4,7 @@ from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.layouts import column, gridplot
 from bokeh.embed import components
 from bokeh.palettes import Viridis3 
+from bokeh.models import DatetimeTickFormatter
 import pandas as pd
 import json, jwt, datetime
 from math import pi
@@ -74,8 +75,6 @@ def search_swimmers_by_name():
         swimmername=form.swimmername.data
         add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
         plots.append(make_plot())
-        app.logger.debug("------------------------------------------------------------") 
-        app.logger.debug(len(plots))
         return redirect(url_for('search_swimmers_by_name'))
     return render_template("times_search.html", form=form, swimmers_added=swimmers_added, plots=plots)
 
@@ -92,15 +91,20 @@ def make_plot():
     primary_swimmer_data=primary_swimmer_data.sort_values(by=['event', 'meet_date'])
 
     events=list(set(primary_swimmer_data.event))
-    app.logger.debug("----------------------------------------------")
-    app.logger.debug(events)
     events.sort()
     plots=[]
     for e in events:
         data = primary_swimmer_data[primary_swimmer_data.event==e]
         data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
-        x = pd.to_datetime(data['meet_date'])
-        y = (data['time_h']*60*60 + data['time_m']*60 + data['time_s'] + data['time_ms']/1000000).tolist()
+        #x = pd.to_datetime(data['meet_date'], format="%y/%m/%d")
+        x = data['meet_age']
+        y = pd.to_datetime(data['time'], format="%M:%S.%f")
+        app.logger.debug("=====================================================")
+        app.logger.debug(e)
+        app.logger.debug(x)
+        app.logger.debug(y)
+        app.logger.debug(type(y))
+        
 
         source = ColumnDataSource(data=dict(
             x=x,
@@ -108,6 +112,7 @@ def make_plot():
             name=data['name'],
             swim_meet=data['swim_meet'],
             meet_date=data['meet_date'].astype(str),
+            age=data['meet_age'],
             result=data['time']
         ))
 
@@ -115,14 +120,28 @@ def make_plot():
             ("Name", "@name"),
             ("Swim Meet", "@swim_meet"),
             ("Date", "@meet_date"),
+            ("At age", "@age"),
             ("Result", "@result")
         ]
 
-        p = figure( x_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
+        p = figure( y_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
         p.xaxis.major_label_orientation= "vertical"
+        '''
+        p.xaxis.formatter=DatetimeTickFormatter(
+                years = ['%m / %d / %Y'],
+                months = ['%m / %d / %Y'],
+                days = ['%m / %d / %Y'],
+            )
+        '''
+        p.yaxis.formatter=DatetimeTickFormatter(
+                minutes = ['%M:%S.%3N'],
+                seconds = ['%M:%S.%3N'],
+                milliseconds = ['%M:%S.%3N'],
+            )
         p.line('x', 'y', line_width=2, source=source)
         p.circle('x','y', size=5, color=Viridis3[0], source=source)
         plots.append(p)
+    
 
 
     # plots is a simple list [p1, p2, p3, p4 ....]
