@@ -57,7 +57,7 @@ def add_swimmers(_swimmers, swimmername):
                 'age': int(_swimmer['age']),
                 'club': _swimmer['club'],
                 'primary': set_primary_swimmer(),
-                'compare': "Checked"
+                'compare': set_primary_swimmer() # if the swimmer is primary, set 'compare' as "checked"
             }
             swimmers_added.append(s)
 
