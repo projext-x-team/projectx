@@ -1,6 +1,6 @@
-def test():
+def test(env):
 	print("Test successful!")
 
 if __name__ == "__main__":
-	test()
-	print("Done")
+	test(env)
+	print("Test "+ env + " Done")
