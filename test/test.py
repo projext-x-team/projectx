@@ -1,6 +1,11 @@
+#!/usr/bin/python3
+
+import sys
+
 def test(env):
-	print("Test successful!")
+	if len(env)>0:
+		print("Test "+env[0]+" successful!")
 
 if __name__ == "__main__":
-	test($env)
-	print("Test "+ env + " Done")
+	test(sys.argv[1:])
+	print("Test "+ str(sys.argv[1:])+ " Done")
