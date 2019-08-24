@@ -30,6 +30,9 @@ def set_primary_swimmer():
                 return ""
         return "Checked"
 
+def set_compare_swimmer():
+    return "Checked"
+
 # add new swimmers to compare
 def add_swimmers(_swimmers, swimmername):
     if len(_swimmers) == 0:
@@ -55,7 +58,7 @@ def add_swimmers(_swimmers, swimmername):
                 'age': int(_swimmer['age']),
                 'club': _swimmer['club'],
                 'primary': set_primary_swimmer(),
-                'compare': set_primary_swimmer() # if the swimmer is primary, set 'compare' as "checked"
+                'compare': set_compare_swimmer() # set 'compare' as "checked" as default
             }
             swimmers_added.append(s)
 
@@ -93,46 +96,60 @@ def make_plot():
     events.sort()
     plots=[]
     for e in events:
-        data = primary_swimmer_data[primary_swimmer_data.event==e]
-        # data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
-        #x = pd.to_datetime(data['meet_date'], format="%y/%m/%d")
-        x = data['meet_age']
-        y = pd.to_datetime(data['time'], format="%M:%S.%f")
-        
-        source = ColumnDataSource(data=dict(
-            x=x,
-            y=y,
-            name=data['name'],
-            swim_meet=data['swim_meet'],
-            meet_date=data['meet_date'].astype(str),
-            age=data['meet_age'],
-            result=data['time']
-        ))
+        p = figure()
+        #add data to existing plot for every swimmer
+        for index, swimmer in compared_swimmers.iterrows():
+            compared_swimmer_data=df_swimmers_data[df_swimmers_data.swimmer_uuid==swimmer.swimmer_uuid]
+            compared_swimmer_data['meet_date'] = compared_swimmer_data['meet_date'].astype('datetime64[ns]')
+            compared_swimmer_data=compared_swimmer_data.sort_values(by=['event', 'meet_date'])
 
-        tooltips = [
-            ("Name", "@name"),
-            ("Swim Meet", "@swim_meet"),
-            ("Date", "@meet_date"),
-            ("At age", "@age"),
-            ("Result", "@result")
-        ]
+            data = compared_swimmer_data[compared_swimmer_data.event==e]
 
-        p = figure( y_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
-        p.xaxis.major_label_orientation= "vertical"
-        '''
-        p.xaxis.formatter=DatetimeTickFormatter(
-                years = ['%m / %d / %Y'],
-                months = ['%m / %d / %Y'],
-                days = ['%m / %d / %Y'],
-            )
-        '''
-        p.yaxis.formatter=DatetimeTickFormatter(
-                minutes = ['%M:%S.%3N'],
-                seconds = ['%M:%S.%3N'],
-                milliseconds = ['%M:%S.%3N'],
-            )
-        p.line('x', 'y', line_width=2, source=source, legend=data['name'].iloc[0], line_color=Viridis3[0])
-        p.circle('x','y', size=5, color=Viridis3[0], source=source)
+            if data.empty == False:
+                # data['swim_meet_date'] = data['swim_meet']+ " " + data['meet_date'].astype(str)
+                #x = pd.to_datetime(data['meet_date'], format="%y/%m/%d")
+                x = data['meet_age']
+                y = pd.to_datetime(data['time'], format="%M:%S.%f")
+
+                source = ColumnDataSource(data=dict(
+                    x=x,
+                    y=y,
+                    name=data['name'],
+                    swim_meet=data['swim_meet'],
+                    meet_date=data['meet_date'].astype(str),
+                    age=data['meet_age'],
+                    result=data['time']
+                ))
+
+                tooltips = [
+                    ("Name", "@name"),
+                    ("Swim Meet", "@swim_meet"),
+                    ("Date", "@meet_date"),
+                    ("At age", "@age"),
+                    ("Result", "@result")
+                ]
+
+                p = figure( y_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
+                p.xaxis.major_label_orientation= "vertical"
+                '''
+                p.xaxis.formatter=DatetimeTickFormatter(
+                        years = ['%m / %d / %Y'],
+                        months = ['%m / %d / %Y'],
+                        days = ['%m / %d / %Y'],
+                    )
+                '''
+                p.yaxis.formatter=DatetimeTickFormatter(
+                        minutes = ['%M:%S.%3N'],
+                        seconds = ['%M:%S.%3N'],
+                        milliseconds = ['%M:%S.%3N'],
+                    )
+                print (data['name'])
+                print ("_________________________________________")
+                print (data['name'].iloc[0])
+                print ("-----------------------------------")
+                p.line('x', 'y', line_width=2, source=source,legend=data['name'].iloc[0], line_color=Viridis3[index%3])
+                p.circle('x','y', size=5, color=Viridis3[index%3], source=source)
+
         p.legend.location = "top_right"
         p.xaxis.axis_label = "Age"
         p.yaxis.axis_label = "Time"
