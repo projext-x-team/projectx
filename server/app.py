@@ -78,6 +78,7 @@ def search_swimmers_by_name():
     if form.validate_on_submit():
         swimmername=form.swimmername.data
         add_swimmers(Swimmer.get_swimmer_by_name(swimmername), swimmername)
+        plots.clear()
         plots.append(make_plot())
         return redirect(url_for('search_swimmers_by_name'))
     return render_template("times_search.html", form=form, swimmers_added=swimmers_added, plots=plots)
@@ -162,7 +163,8 @@ def make_plot():
         ps.append([plots[i*2],plots[i*2+1]])
     if len(plots) % 2 ==1:  # if plots has odd number
         ps=ps.append([plots[len(plots)-1],None])
-    
+    print(len(ps))
+    print("-------------------------------")
     #script, div = components(column(plots))
     grid = gridplot(ps)
     script, div = components(grid)
