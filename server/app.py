@@ -4,6 +4,7 @@ from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.layouts import column, gridplot
 from bokeh.embed import components
 from bokeh.palettes import Plasma5 
+from bokeh.models import Legend
 from bokeh.models import DatetimeTickFormatter
 import pandas as pd
 import json, jwt, datetime
@@ -96,6 +97,7 @@ def make_plot():
     events.sort()
     plots=[]
     for e in events:
+        legend_list = []
         tooltips = [
             ("Name", "@name"),
             ("Swim Meet", "@swim_meet"),
@@ -142,10 +144,12 @@ def make_plot():
                         seconds = ['%M:%S.%3N'],
                         milliseconds = ['%M:%S.%3N'],
                     )
-                p.line('x', 'y', line_width=2, source=source,legend=data['name'].iloc[0], line_color=Plasma5[index%5])
-                p.circle('x','y', size=5, color=Plasma5[index%5], source=source)
+                line = p.line('x', 'y', line_width=2, source=source, line_color=Plasma5[index%5])
+                circle = p.circle('x','y', size=5, color=Plasma5[index%5], source=source)
+                legend_list.append((data['name'].iloc[0], [circle, line]))
 
-        p.legend.location = "top_right"
+        legend = Legend(items=legend_list, location="top_right")
+        p.add_layout(legend, 'right')
         p.xaxis.axis_label = "Age"
         p.yaxis.axis_label = "Time"
         plots.append(p)
