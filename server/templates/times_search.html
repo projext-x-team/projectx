@@ -54,8 +54,9 @@
                 </article>
                 <article>
                     <h2>Swimmers Added</h2>
-                    <form action="" method="post" class="compare">
+                    <form action="{{url_for('search_swimmers_by_name')}}" method="post" class="compare">
                         {% if swimmers_added %}
+                        <button class="btn btn-default" type="submit">Submit</button>
                         <table class="table table-hover table-striped table-responsive">
                             <tr>
                                 <th>Swimmer</th>
@@ -78,6 +79,18 @@
                         No swimmers added yet.
                         {% endif %}
                     </form>
+                    <div class="tab-content">
+                        <article>
+                            {% if plots %}
+                            <h2>Swimmer Comparison</h2>
+                                {% for plot in plots %}
+                                    {% for part in plot %}
+                                        {{ part | safe }}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        </article>
+                    </div>
                 </article>
             </div>
             <div class="tab-pane" id="2">
@@ -90,18 +103,6 @@
                     <h1>Time Standards Comparison</h1>
                 </article>
             </div>
-        </div>
-        <div class="tab-content">
-            <article>
-                {% if plots %}
-                <h2>Swimmer Comparison</h2>
-                    {% for plot in plots %}
-                        {% for part in plot %}
-                            {{ part | safe }}
-                        {% endfor %}
-                    {% endfor %}
-                {% endif %}
-            </article>
         </div>
     </article>
 

@@ -31,8 +31,11 @@ def set_primary_swimmer():
                 return ""
         return "Checked"
 
+# set swimmers to compare based on user selection
 def set_compare_swimmer():
-    return "Checked"
+    if len(swimmers_added) < 5:
+        return "Checked"
+    return ""
 
 # add new swimmers to compare
 def add_swimmers(_swimmers, swimmername):
@@ -163,13 +166,11 @@ def make_plot():
         ps.append([plots[i*2],plots[i*2+1]])
     if len(plots) % 2 ==1:  # if plots has odd number
         ps=ps.append([plots[len(plots)-1],None])
-    print(len(ps))
-    print("-------------------------------")
+
     #script, div = components(column(plots))
     grid = gridplot(ps)
     script, div = components(grid)
     return script, div
-
 
 @app.errorhandler(404)
 def page_not_found(e):
