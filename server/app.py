@@ -3,7 +3,7 @@ from functools import wraps
 from bokeh.plotting import figure, output_file, show, ColumnDataSource
 from bokeh.layouts import column, gridplot
 from bokeh.embed import components
-from bokeh.palettes import Viridis3 
+from bokeh.palettes import Plasma5 
 from bokeh.models import DatetimeTickFormatter
 import pandas as pd
 import json, jwt, datetime
@@ -96,7 +96,15 @@ def make_plot():
     events.sort()
     plots=[]
     for e in events:
-        p = figure()
+        tooltips = [
+            ("Name", "@name"),
+            ("Swim Meet", "@swim_meet"),
+            ("Date", "@meet_date"),
+            ("At age", "@age"),
+            ("Result", "@result")
+        ]
+
+        p = figure( y_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
         #add data to existing plot for every swimmer
         for index, swimmer in compared_swimmers.iterrows():
             compared_swimmer_data=df_swimmers_data[df_swimmers_data.swimmer_uuid==swimmer.swimmer_uuid]
@@ -121,15 +129,6 @@ def make_plot():
                     result=data['time']
                 ))
 
-                tooltips = [
-                    ("Name", "@name"),
-                    ("Swim Meet", "@swim_meet"),
-                    ("Date", "@meet_date"),
-                    ("At age", "@age"),
-                    ("Result", "@result")
-                ]
-
-                p = figure( y_axis_type="datetime", plot_height=250, sizing_mode="scale_width", tooltips=tooltips, title=e)
                 p.xaxis.major_label_orientation= "vertical"
                 '''
                 p.xaxis.formatter=DatetimeTickFormatter(
@@ -143,12 +142,8 @@ def make_plot():
                         seconds = ['%M:%S.%3N'],
                         milliseconds = ['%M:%S.%3N'],
                     )
-                print (data['name'])
-                print ("_________________________________________")
-                print (data['name'].iloc[0])
-                print ("-----------------------------------")
-                p.line('x', 'y', line_width=2, source=source,legend=data['name'].iloc[0], line_color=Viridis3[index%3])
-                p.circle('x','y', size=5, color=Viridis3[index%3], source=source)
+                p.line('x', 'y', line_width=2, source=source,legend=data['name'].iloc[0], line_color=Plasma5[index%5])
+                p.circle('x','y', size=5, color=Plasma5[index%5], source=source)
 
         p.legend.location = "top_right"
         p.xaxis.axis_label = "Age"
